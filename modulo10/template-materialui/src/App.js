@@ -1,11 +1,11 @@
 import Header from "./components/header";
-import Tarefa from "./pages/tarefa";
+import ListarTarefa from "./pages/tarefa/ListarTarefa";
 
 function App() {
   return (
     <div className="App">
       <Header />
-      <Tarefa />
+      <ListarTarefa />
     </div>
   );
 }

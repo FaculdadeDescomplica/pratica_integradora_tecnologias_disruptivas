@@ -9,7 +9,9 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 
-const FormCriarTarefa = ({handleClose, tarefas, setTarefas}) =>{
+//Declaração do componente EditarTarefa, recebendo como props, do Componente ListarTarefa, os states handCloseEditar,
+// idTarefaSelecionada, tarefas, tarefa e setTarefas
+const EditarTarefa = ({handleCloseEditar, idTarefaSelecionada, tarefas, tarefa, setTarefas}) =>{
   const [idTarefa, setIdTarefa] = useState();
   const [tituloTarefa, setTituloTarefa] = useState('');
   const [descricaoTarefa, setDescricaoTarefa] = useState('');
@@ -17,10 +19,18 @@ const FormCriarTarefa = ({handleClose, tarefas, setTarefas}) =>{
   const [fimTarefa, setFimTarefa] = useState('');
   const [recursoTarefa, setRecursoTarefa] = useState('');
   const [statusTarefa, setStatusTarefa] = useState('');
-  
+
+  //Abaixo setamos os valores dos states (que popularão o formulário mais abaixo) com os valores do state Tarefa,
+  //  recebido como props do componente ListarTarefa.
   useEffect(() => {
-    let proximoId = Math.max(...tarefas.map(tarefa => tarefa.idTarefa)) + 1;
-    setIdTarefa(proximoId);
+    //console.log('Tarefa selecionada: ' + JSON.stringify(tarefa));
+    setIdTarefa(idTarefaSelecionada);
+    setTituloTarefa(tarefa.tituloTarefa);
+    setDescricaoTarefa(tarefa.descricaoTarefa);
+    setInicioTarefa(tarefa.inicioTarefa);
+    setFimTarefa(tarefa.fimTarefa);
+    setRecursoTarefa(tarefa.recursoTarefa);
+    setStatusTarefa(tarefa.statusTarefa);
   },[]);
 
   const handleRecurso = (event) => {
@@ -31,23 +41,30 @@ const FormCriarTarefa = ({handleClose, tarefas, setTarefas}) =>{
     setStatusTarefa(event.target.value);
   };
 
-  const handleSalvar = () => {
-    console.log(`id: ${idTarefa} \n titulo: ${tituloTarefa} \n descrição: ${descricaoTarefa} \n inicio: ${inicioTarefa} \n fim: ${fimTarefa} \n recurso: ${recursoTarefa} \n status: ${statusTarefa}`);
-
-    setTarefas(
-      [...tarefas, 
-        {
-          idTarefa,
-          tituloTarefa,
-          descricaoTarefa,
-          inicioTarefa,
-          fimTarefa,
-          recursoTarefa,
-          statusTarefa
+  const handleEditar = () => {
+    //console.log(`id: ${idTarefa} \n titulo: ${tituloTarefa} \n descrição: ${descricaoTarefa} \n inicio: ${inicioTarefa} \n fim: ${fimTarefa} \n recurso: ${recursoTarefa} \n status: ${statusTarefa}`);
+    //console.log('idTarefaSelecionada: ' + idTarefaSelecionada);
+    setTarefas(current =>
+      current.map(obj => {
+        if (obj.idTarefa === idTarefaSelecionada) {
+          console.log('obj: ' + JSON.stringify(obj));          
+          return {...obj, 
+              idTarefa:idTarefaSelecionada,
+              tituloTarefa:tituloTarefa,
+              descricaoTarefa:descricaoTarefa,
+              inicioTarefa:inicioTarefa,
+              fimTarefa:fimTarefa,
+              recursoTarefa:recursoTarefa,
+              statusTarefa:statusTarefa
+          };
         }
-      ]);
-    console.log(`Tarefas: ` + JSON.stringify(tarefas));
-    handleClose();
+
+        return obj;
+      }),
+    );
+
+    //console.log(`Tarefas Editadas: ` + JSON.stringify(tarefas));
+    handleCloseEditar();
   };
 
   return(
@@ -55,7 +72,7 @@ const FormCriarTarefa = ({handleClose, tarefas, setTarefas}) =>{
       <Card sx={style}>
         <CardHeader
           title="Tarefas"
-          subheader="Cadastro de Tarefas"
+          subheader="Edição de Tarefas"
         /> 
         <CardContent sx={{
           width: '95%',
@@ -140,10 +157,10 @@ const FormCriarTarefa = ({handleClose, tarefas, setTarefas}) =>{
             </Grid>
             <Grid container spacing={2} pl={2} mt={2}>
               <Grid item xs={1}>
-                <Button size="small" variant="contained" onClick={handleSalvar}>Salvar</Button>
+                <Button size="small" variant="contained" onClick={handleEditar}>Salvar</Button>
               </Grid>  
               <Grid item xs={1}>  
-                <Button size="small" variant="outlined" onClick={handleClose}>Cancelar</Button>  
+                <Button size="small" variant="outlined" onClick={handleCloseEditar}>Cancelar</Button>  
               </Grid>
             </Grid>  
           </Grid>
@@ -163,4 +180,4 @@ const style = {
   p: 4,
 };
 
-export default FormCriarTarefa;
+export default EditarTarefa;

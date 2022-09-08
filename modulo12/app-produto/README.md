@@ -1,6 +1,8 @@
 # Aplicação React de Gerenciamento de Projetos e Tarefas
 
-Projeto criado com as bibliotecas React JS e Material UI.
+Projeto criado com as bibliotecas React JS, Material UI e Axios.
+Tal aplicação é composta por um componente principal, que realiza requisição para a API "https://fakestoreapi.com" e exibe
+os resultados num componente DataGrid.
 
 ## Passo-a-passo para execução
 

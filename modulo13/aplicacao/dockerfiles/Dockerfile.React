@@ -1,0 +1,21 @@
+FROM node:slim
+
+#Define o diretorio de trabalho dentro do container
+WORKDIR /app
+
+#Opcional: instala o bash e o procps
+RUN /bin/sh -c "apt-get install bash"
+RUN apt-get update && apt-get install -y procps
+
+#Copia o arquivo de dependencias para o workdir
+COPY frontend/package.json ./
+
+#Instala as dependencias definidas no package.json
+RUN npm install
+
+#Copia o codigo da aplicacao do host para o container
+COPY frontend/ .
+
+EXPOSE 3000
+
+CMD ["npm", "start"]

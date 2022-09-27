@@ -1,0 +1,61 @@
+version: '3.1'
+
+services:
+  backend:
+    image: 'docker-spring-boot:latest'
+    container_name: backend
+    build:
+      context: ../descomplica
+      dockerfile: ./dockerfiles/Dockerfile.Spring.Boot
+    tty: true  
+    depends_on:
+      db_postgresql:
+        condition: service_healthy  
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db_postgresql:5432/bd_projeto_integrado
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password-bd-projeto-integrado
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    restart: unless-stopped  
+    ports:
+        - 18080:8080  
+    networks:
+        - projeto-integrado-network  
+          
+  db_postgresql:
+    image: 'postgres:13.1-alpine'
+    container_name: db_postgresql
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password-bd-projeto-integrado
+      - POSTGRES_DB=bd_projeto_integrado
+    restart: always
+    volumes: 
+          - ./bancodedados/data:/var/lib/postgresql/data
+          # copia o script sql para criacao das tabelas
+          - ./bancodedados/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+        - 25432:5432  
+    networks:
+        - projeto-integrado-network    
+        
+  frontend:
+    container_name: frontend
+    build:
+      context: ../descomplica
+      dockerfile: ./dockerfiles/Dockerfile.React
+    ports: 
+      - "13000:3000"
+    networks:
+        - projeto-integrado-network  
+    volumes: 
+      - ./frontend/node_modules        
+      
+networks:
+    projeto-integrado-network:
+        driver: bridge      

@@ -1,0 +1,4 @@
+frontend/node_modules
+docker-compose.yml
+dockerfiles/Dockerfile.React
+dockerfiles/Dockerfile.Spring.Boot

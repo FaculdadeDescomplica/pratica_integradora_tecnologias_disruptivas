@@ -38,6 +38,14 @@ CREATE TABLE IF NOT EXISTS gerente_projeto (
 	recurso_id           integer  NOT NULL  
  );
 
+CREATE TABLE IF NOT EXISTS usuario ( 
+	user_id              serial  NOT NULL  ,
+	user_nome            varchar(255)    ,
+	user_email           varchar(255)    ,
+	user_password        varchar(255)    ,
+	PRIMARY KEY ( user_id )
+ );
+
 ALTER TABLE gerente_projeto ADD CONSTRAINT fk_projeto FOREIGN KEY ( projeto_id ) REFERENCES projeto( projeto_id );
 
 ALTER TABLE gerente_projeto ADD CONSTRAINT fk_recurso FOREIGN KEY ( recurso_id ) REFERENCES recurso( recurso_id );

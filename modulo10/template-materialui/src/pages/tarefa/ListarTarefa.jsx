@@ -81,6 +81,27 @@ const ListarTarefa = () => {
     );
   };
 
+  const ordenarLista = (key)=>{
+    console.log('teste');
+    let sortedTasks;
+    if(key === "inicioTarefa" || key === "fimTarefa"){
+
+      sortedTasks = tarefas.sort((a,b)=>{
+        var dateA = new Date(a[key]);
+        var dateB = new Date(b[key]);
+        return (dateA < dateB) ? -1 : (dateA > dateB) ? 1 : 0;
+      });
+    }else{
+      sortedTasks = tarefas.sort((a,b)=>{
+        var textA = a[key].toUpperCase();
+        var textB = b[key].toUpperCase();
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+      });
+    }
+    console.log(sortedTasks);
+    setTarefas(sortedTasks);
+  }
+
     return(
     <>
     <Card>
@@ -93,13 +114,12 @@ const ListarTarefa = () => {
             <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                 <TableHead>
                 <TableRow>
-                    <TableCell>#</TableCell>
-                    <TableCell>Título</TableCell>
-                    <TableCell align="right">Descrição</TableCell>
-                    <TableCell align="right">Data de Início</TableCell>
-                    <TableCell align="right">Data de Finalização</TableCell>
-                    <TableCell align="right">Status</TableCell>
-                    <TableCell align="right">Recurso</TableCell>
+                    <TableCell><h2 >Título</h2></TableCell>
+                    <TableCell align="right"><h2>Descrição</h2></TableCell>
+                    <TableCell align="right"><h2>Data de Início</h2></TableCell>
+                    <TableCell align="right"><h2>Data de Finalização</h2></TableCell>
+                    <TableCell align="right"><h2>Status</h2></TableCell>
+                    <TableCell align="right"><h2>Recurso</h2></TableCell>
                     <TableCell align="left"></TableCell>
                     <TableCell align="left"></TableCell>
                 </TableRow>
@@ -110,9 +130,7 @@ const ListarTarefa = () => {
                     key={indice}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                      <TableCell component="th" scope="row">
-                          {row.idTarefa}
-                      </TableCell>
+
                       <TableCell component="th" scope="row">
                           {row.tituloTarefa}
                       </TableCell>
